@@ -1,0 +1,7 @@
+[defaults]
+host_key_checking = false  # оце потрібно щоб не писало fingerpring yes
+inventory         = ./hosts.txt  # оце потрібно щоб кожен раз не писати ansible -i hosts.txt
+
+# тепер команда буде виглядати ansible all -m ping 
+# замість ansible -i hosts.txt all -m ping
+
