@@ -5,3 +5,45 @@ inventory         = ./hosts.txt  # оце потрібно щоб кожен р�
 # тепер команда буде виглядати ansible all -m ping 
 # замість ansible -i hosts.txt all -m ping
 
+
+####################################################
+# how can be inventory organized
+
+[server1]
+192.168.0.1
+192.168.0.2
+
+
+[server2]
+192.168.0.3
+192.168.0.4
+
+
+[server3:children]
+server1
+server2
+
+[server4:childer]
+server3
+
+####################################################
+
+# також можна винести юзера і шлях до ssh у vars
+
+[prod_servers:vars]  # same name as group name but adding vars
+ansible_user=ec2-user
+ansible_ssh_private_key_file=/home/ec2-user/.ssh/id_rsa.pem
+
+
+[prod_servers]
+linux1 ansible_host=172.168.0.1
+linux2 ansible_host=172.168.0.2
+
+####################################################
+
+# show all servers from inventory
+
+ansible-inventory --list 
+
+####################################################
+
