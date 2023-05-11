@@ -43,7 +43,57 @@ linux2 ansible_host=172.168.0.2
 
 # show all servers from inventory
 
-ansible-inventory --list 
+ansible-inventory --list
+
 
 ####################################################
 
+# ad-hoc команди це прості команди які знаходять не в playbook
+тобто через: ansible all -m <ad_hoc command>
+
+example:
+ansible all -m setup  # покаже інформацію про віддалений хост
+
+щоб запустити команду на віддалених серверах всіх
+ansible all -m shell -a "uptime"
+
+ansible all -m command -a "uptime"  # але мінус command що він не бачиьт environment variables
+
+####################################################
+Копійнути файл на всі хости
+
+ansible all -m copy -a "src=test.txt dest=/home mode=777"  # але викине помилку permission
+
+ansible all -m copy -a "src=test.txt dest=/home mode=777" -b -K # like become superuser
+
+####################################################
+Видалити файлик з хостів
+
+ansible all -m file -a "path=/home/test.txt state=absent" -b -K
+
+####################################################
+Установити щось
+
+ansible all -m apt -a "name=curl state=present" -b -K
+####################################################
+Видалити щось
+
+ansible all -m apt -a "name=curl state=removed" -b -K
+####################################################
+Запуск сервіса після перезагрузки
+
+ansible all -m service -a "name=httpd state=started enabled=yes" -b
+####################################################
+Дебаг команда
+
+ansible all -m command -a "uptime" -v  # verbose більше інформації
+ansible all -m command -a "uptime" -vv  # ще більше інформації
+ansible all -m command -a "uptime" -vvv  # ще більше інформації
+ansible all -m command -a "uptime" -vvvv  # ще більше інформації
+
+####################################################
+Показати всі модулі в ansible
+
+ansible-doc -l
+
+####################################################

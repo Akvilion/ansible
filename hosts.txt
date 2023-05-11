@@ -1,6 +1,2 @@
 [hst]
-linux1 ansible_host=192.168.0.109
-
-[hst:vars]
-ansible_user=a1
-ansible_ssh_private_key_file=/home/a12/.ssh/keys/id_rsa.pub
+linux1 ansible_host=192.168.0.109 password=2
