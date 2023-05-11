@@ -1,0 +1,23 @@
+---
+- name: install apache and upload my index page 
+  hosts: all
+  become: yes
+
+  vars:
+    source_file: ./MyWebSite/index.html
+    destination: /var/www/html
+
+  tasks:
+    - name: Install apache web server 
+      apt: name=apache2 state=present
+
+    - name: Copy file to directory
+      copy: src={{ source_file }} dest={{ destination }} mode=0555
+      notify: restart Apache2
+
+    - name: Start web server and make it enabled on boot
+      service: name=apache2 state=started enabled=yes
+
+  handlers:
+    - name: restart Apache2
+      service: name=apache2 state=restarted 
