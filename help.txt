@@ -102,6 +102,8 @@ ansible-doc -l
 ansible-playbook playbook1.yml
 
 #########################################################
+Добавлення трігерів
+
 - name: install apache and upload my index page 
   hosts: all
   become: yes
@@ -124,3 +126,78 @@ ansible-playbook playbook1.yml
     handlers:  # оце перегрузить сервіс тільки коли фалик буде завантажено
     - name: restart Apache2
       service: name=apache2 state=restarted 
+
+
+#########################################################
+Debug
+Просто напечатає то що знаходиться у secret
+
+
+- name: a1
+  hosts: all
+  become: yes
+
+  vars:
+  - message1: Hello
+  - message2: World
+  - secret: osdfho32n2
+  
+  tasks:
+  - name: Print secret variable
+    debug:
+      var: secret
+
+  tasks:
+  - name: debuger
+    debug:
+      msg: "my war {{ secret }}"
+
+
+##############################################
+Приклад без tasks з debug та об'єднання
+
+- name: a1
+  hosts: all
+  become: yes
+
+  vars:
+  - message1: Hello
+  - message2: World
+  - secret: osdfho32n2
+  
+  tasks:
+  - name: Print secret variable
+    debug:
+      var: secret
+
+  - debug:
+      msg: "my war {{ secret }}"
+
+  - debug:
+      msg: "server owner {{ owner }}"
+  
+  - set_fact: full_name="{{ message1 }} {{ message2 }}"
+
+  - debug:
+      var: full_name   # так як тут стоїть var то {{}} не потрібно
+
+##############################################
+Покаже конфіги серваків
+
+ansible all -m setup
+
+Потім поля можна використовувати в плейбуках
+
+  - debug:
+      var: ansible_distribution
+
+
+##############################################
+Як зберегти результат команда
+
+- shell: uptime
+  register: results  # отак зберігається output
+  
+{{ register }}
+
+##############################################

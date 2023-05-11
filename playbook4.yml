@@ -1,0 +1,29 @@
+---
+
+- name: a1
+  hosts: all
+  become: yes
+
+  vars:
+  - message1: Hello
+  - message2: World
+  - secret: osdfho32n2
+  
+  tasks:
+  - name: Print secret variable
+    debug:
+      var: secret
+
+  - debug:
+      msg: "my war {{ secret }}"
+
+  - debug:
+      msg: "server owner {{ owner }}"
+  
+  - set_fact: full_name="{{ message1 }} {{ message2 }}"
+
+  - debug:
+      var: full_name 
+    
+  - debug:
+      var: ansible_distribution
