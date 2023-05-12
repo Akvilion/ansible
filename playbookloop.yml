@@ -6,7 +6,19 @@
   tasks:
   - name: say hello to all
     debug: msg="Hello {{ item }}"
-    with_items:
+    loop:
     - "One"
     - "Two"
     - "Three"
+  
+  - name: loop antile something
+    shell: echo -n Z >> myfile.txt  && cat myfile.txt
+    register: output
+    delay: 2
+    retries: 10
+    until: output.stdout.find("ZZZZ") == false
+
+  - name: print final output
+    debug: 
+      var: output.stdout
+    

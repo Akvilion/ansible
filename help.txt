@@ -223,7 +223,47 @@ WHEN оператор
       when: ansible_os_family=="RedHat"
 
 ##############################################
+loops
+Три раза виведе повідомлення
 
+  tasks:
+  - name: say hello to all
+    debug: msg="Hello {{ item }}"
+    loop:
+    - "One"
+    - "Two"
+    - "Three"
 
+##############################################
+register - запхати все у змінну
+delay - затримка 2 секунди
+retries - 10 повторів
+until - допоки у файлику не буде 4 Z
+  
 
+  - name: loop antile something
+    shell: echo -n Z >> myfile.txt  && cat myfile.txt
+    register: output
+    delay: 2
+    retries: 10
+    until: output.stdout.find("ZZZZ") == false
+
+  - name: print final output
+    debug: 
+      var: output.stdout
+
+debug.var - вивести output
+
+##############################################
+Як встановити багато чого в циклі
+
+  tasks:
+  - name: say hello to all
+    apt: name={{ item }} state=present
+    loop:
+    - "python3"
+    - "ssh-server"
+    - "tree"
+
+##############################################
 
