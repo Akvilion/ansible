@@ -3,10 +3,6 @@
   hosts: all
   become: yes
 
-  vars:
-    source_folder: ./MyWebSite2
-    destination_folder: /var/www/html
-
   tasks:
     - name: show os type
       debug: var=ansible_os_family
@@ -47,13 +43,4 @@
       notify:
         - restart httpd RedHat
         - restart apache2 Debian
-
-  handlers:
-    - name: restart Apache2 Debian
-      service: name=apache2 state=restarted 
-      when: ansible_os_family=="Debian"
-    
-    - name: restart httpd RedHat
-      service: name=httpd state=restarted 
-      when: ansible_os_family=="RedHat"
 

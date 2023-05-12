@@ -1,0 +1,41 @@
+---
+# tasks file for create_apache_web
+- name: show os type
+  debug: var=ansible_os_family
+
+
+- block:   # ====block for RedHat====
+  - name: Install apache web server RedHat
+    apt: name=httpd state=present
+
+  - name: Start web server and make it enabled on boot RedHat
+    service: name=httpd state=started enabled=yes
+  when: ansible_os_family=="RedHat"
+
+
+- block:   # ====block for Debian====
+  - name: Install apache web server Debian
+    apt: name=apache2 state=present
+
+  - name: Start web server and make it enabled on boot Debian
+    service: name=apache2 state=started enabled=yes
+  when: ansible_os_family=="Debian"
+
+
+- name: generate index.html file
+  template: src=index.j2 dest={{ destination_folder }}/index.html mode=0555
+  notify:
+    - restart httpd RedHat
+    - restart apache2 Debian
+
+
+- name: Copy file to directory for RedHat
+  copy: src={{ item }} dest={{ destination_folder }} mode=0555
+  loop:
+    - "1.jpeg"
+    - "2.jpeg"
+    - "3.jpeg"
+    - "4.jpeg"    
+  notify:
+    - restart httpd RedHat
+    - restart apache2 Debian

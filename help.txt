@@ -304,3 +304,18 @@ IP address - {{ ansible_default_ipv4.address }} <br>
 
 ##############################################
 
+Ролі
+
+створюємо папку roles
+
+запускаємо команду
+ansible-galaxy init deploy_apache_web
+
+створить папку всередині roles
+суть розпихати наш playbook по фаликах
+
+Оце кладем в плейбук
+  roles:
+    - { role: create_apache_web, when: ansible_system== 'Linux' }
+
+##############################################

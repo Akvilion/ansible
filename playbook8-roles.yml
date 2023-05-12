@@ -1,0 +1,7 @@
+---
+- name: install apache and upload my index page 
+  hosts: all
+  become: yes
+
+  roles:
+    - { role: create_apache_web, when: ansible_system== 'Linux' }
