@@ -11,29 +11,35 @@
     - name: show os type
       debug: var=ansible_os_family
 
-    - name: Install apache web server Ubuntu
-      apt: name=apache2 state=present
-      when: ansible_os_family=="Debian"
 
-    - name: Install apache web server RedHat
-      yum: name=httpd state=present
+    - block:   # ====block for RedHat====
+      - name: Install apache web server RedHat
+        apt: name=httpd state=present
+
+      - name: Copy file to directory for RedHat
+        copy: src={{ source_file }} dest={{ destination }} mode=0555
+        notify: restart httpd RedHat
+
+      - name: Start web server and make it enabled on boot RedHat
+        service: name=httpd state=started enabled=yes
       when: ansible_os_family=="RedHat"
 
-    - name: Copy file to directory
-      copy: src={{ source_file }} dest={{ destination }} mode=0555
-#      notify: restart Apache2 Debian
 
-    - name: Start web server and make it enabled on boot Debian
-      service: name=apache2 state=started enabled=yes
+    - block:   # ====block for Debian====
+      - name: Install apache web server Debian
+        apt: name=apache2 state=present
+
+      - name: Copy file to directory for Debian
+        copy: src={{ source_file }} dest={{ destination }} mode=0555
+        notify: restart Apache2 Debian
+
+      - name: Start web server and make it enabled on boot Debian
+        service: name=apache2 state=started enabled=yes
       when: ansible_os_family=="Debian"
-
-    - name: Start web server and make it enabled on boot RedHat
-      service: name=https state=started enabled=yes
-      when: ansible_os_family=="RedHat"
 
   handlers:
     - name: restart Apache2 Debian
       service: name=apache2 state=restarted 
     
-    - name: restart Apache2 RedHat
+    - name: restart httpd RedHat
       service: name=httpd state=restarted 
