@@ -267,3 +267,17 @@ debug.var - вивести output
 
 ##############################################
 
+Копійнути все що є в директорії
+
+    - name: Copy file to directory for RedHat
+      copy: src={{ item }} dest={{ destination_folder }} mode=0555
+      with_fileglob: "{{ source_folder }}/*.*"
+      # loop:
+      #   - "1.jpeg"
+      #   - "2.jpeg"
+      #   - "3.jpeg"
+      #   - "4.jpeg"    
+      #   - "index.html"
+
+##############################################
+

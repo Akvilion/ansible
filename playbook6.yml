@@ -30,13 +30,14 @@
       when: ansible_os_family=="Debian"
 
     - name: Copy file to directory for RedHat
-      copy: src={{ source_folder }}/{{ item }} dest={{ destination_folder }} mode=0555
-      loop:
-        - "1.jpeg"
-        - "2.jpeg"
-        - "3.jpeg"
-        - "4.jpeg"    
-        - "index.html"
+      copy: src={{ item }} dest={{ destination_folder }} mode=0555
+      with_fileglob: "{{ source_folder }}/*.*"
+      # loop:
+      #   - "1.jpeg"
+      #   - "2.jpeg"
+      #   - "3.jpeg"
+      #   - "4.jpeg"    
+      #   - "index.html"
       notify:
         - restart httpd RedHat
         - restart apache2 Debian
