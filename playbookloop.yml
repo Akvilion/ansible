@@ -1,0 +1,12 @@
+---
+- name: loops playbook
+  hosts: all
+  become: yes
+
+  tasks:
+  - name: say hello to all
+    debug: msg="Hello {{ item }}"
+    with_items:
+    - "One"
+    - "Two"
+    - "Three"
