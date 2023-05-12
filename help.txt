@@ -52,7 +52,7 @@ ansible-inventory --list
 тобто через: ansible all -m <ad_hoc command>
 
 example:
-ansible all -m setup  # покаже інформацію про віддалений хост
+ansible all -m setup  # покаже інформацію про віддалений хост (змінні)
 
 щоб запустити команду на віддалених серверах всіх
 ansible all -m shell -a "uptime"
@@ -278,6 +278,29 @@ debug.var - вивести output
       #   - "3.jpeg"
       #   - "4.jpeg"    
       #   - "index.html"
+
+##############################################
+
+Як зробити щоб файл не копіювало а генерувало для кожного серверах
+
+в хості наприклад є така лінійка
+[hst]
+linux1 ansible_host=192.168.0.109 owner=Akvilion
+
+значить в index.html потрібно перейменувати на index.j2
+і вставити {{ owner }}
+
+Server host name - {{ ansible_hostname }} <br>
+Server OS - {{ ansible_os_family }} <br>
+IP address - {{ ansible_default_ipv4.address }} <br>
+
+і щоб пройшла заміна потрібно вказати в плейбуку + заміна назви на html
+
+    - name: generate index.html file
+      template: src={{ source_folder }}/index.j2 dest={{ destination_folder }}/index.html mode=0555
+
+
+темплейт якраз і проводить заміну
 
 ##############################################
 

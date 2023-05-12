@@ -1,2 +1,2 @@
 [hst]
-linux1 ansible_host=192.168.0.109 password=2 owner=Akvilion
+linux1 ansible_host=192.168.0.109 owner=Akvilion

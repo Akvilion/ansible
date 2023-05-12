@@ -7,10 +7,15 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>Hello world<h1>
+    <h1>Hello world by {{ owner }}<h1> <br>
     <img src="1.jpeg" alt="Picture one"/>
     <img src="2.jpeg" alt="Picture two"/>
     <img src="3.jpeg" alt="Picture three"/>
-    <img src="4.jpeg" alt="Picture four"/>
+    <img src="4.jpeg" alt="Picture four"/><br>
+
+    Server host name - {{ ansible_hostname }} <br>
+    Server OS - {{ ansible_os_family }} <br>
+    IP address - {{ ansible_default_ipv4.address }} <br>
+
 </body>
 </html>
