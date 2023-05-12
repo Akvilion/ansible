@@ -201,3 +201,29 @@ ansible all -m setup
 {{ register }}
 
 ##############################################
+Вивести змінну типу os
+
+  tasks:
+    - name: show os type
+      debug: var=ansible_os_family
+
+##############################################
+WHEN оператор
+
+
+    - name: show os type
+      debug: var=ansible_os_family
+
+    - name: Install apache web server Ubuntu
+      apt: name=apache2 state=present
+      when: ansible_os_family=="Debian"
+
+    - name: Install apache web server RedHat
+      yum: name=httpd state=present
+      when: ansible_os_family=="RedHat"
+
+##############################################
+
+
+
+
