@@ -391,3 +391,53 @@ include: спочатку запускає виконання playbook і кол
 
 ##############################################
 
+Перенаправлення tasks на певний хост
+delegate_to
+
+---
+- name: test Include and Import
+  hosts: ALL_LINUX
+  become: yes
+
+  vars:
+    myVar: Hello
+
+  - tasks:
+    - name: ping hosts
+      ping:
+
+    - name: create file
+      copy:
+        dest: /home/secret/file2.txt
+        content: |
+          Some txt 2 {{ myVar }}
+        delegate_to: linux 1  # оця лінійка вкаже на якому саме запускати
+
+    # на кожному хості запуститься команда запису в лог, але сам лог буде створений один на хості
+    - name: delegage_to
+      shell: echo asdsadsadsadsadasd >> /home/log.txt
+      delegate_to: 127.0.0.1  
+
+
+Як почекати поки сервера піднімаються???
+
+
+- name: reboot і не чекати 
+  shell: sleep3 && reboot now
+  async: 1
+  poll: 0
+
+- name: почекати поки перезапустится
+  wait_for: 
+    host: "{{ inventory_hostname }}"
+    state: started
+    delay: 5
+    timeout: 40
+  delegate_to: 127.0.0.1  # чекати треба на мастері бо наші хости в перезагрузці
+
+- name: reboot і не чекати 
+  shell: sleep3 && reboot now
+  run_once: true  # команду запустить тільки 1 раз
+
+##############################################
+
