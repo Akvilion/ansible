@@ -1,0 +1,16 @@
+---
+- name: test Include and Import
+  hosts: all
+  become: yes
+
+  vars:
+    myVar: Hello
+
+  tasks:
+    - name: ping hosts
+      ping:
+
+    - include_tasks: create_folder.yml
+
+    - include_tasks: create_file.yml
+

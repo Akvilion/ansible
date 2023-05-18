@@ -318,4 +318,76 @@ ansible-galaxy init deploy_apache_web
   roles:
     - { role: create_apache_web, when: ansible_system== 'Linux' }
 
+
+
 ##############################################
+
+Зовнішні змінні
+
+В playbook ми вказуємо на які хости ми запускаємо через
+---
+- name: install apache and upload my index page 
+  hosts: all  # (PROD, STAGE)
+  become: yes
+
+  Але можна створити змінну для цього  # "{{ MYHOSTS }}"
+---
+- name: install apache and upload my index page 
+  hosts: "{{ MYHOSTS }}"
+  become: yes
+
+Як засилати цю змінну через extra_vars???
+ansible-playbook playbook8-roles.yml --extra_vars "MYHOSTS=STAGE owner=Griml"
+
+Також перезапише змінну яка є в hosts.txt owner=Akvilion
+
+##############################################
+
+Import, Include
+
+Це як простив варіант ролів коли з playbook ми розкидаємо по файлах
+
+Використовувати Include
+
+Різниця:
+import зразу при запуску копіює блоки з інших файлів і заміняє змінні
+include: спочатку запускає виконання playbook і коли доходить до блоку, тоді копіює
+
+---
+- name: test Include and Import
+  hosts: ALL_LINUX
+  become: yes
+
+  vars:
+    myVar: Hello
+
+  - tasks:
+    - name: ping hosts
+      ping:
+
+  - name: Create folders
+    include: create_folder.yml
+
+  - name: Create files
+    import: create_file.yml
+
+Як прокинути змінні
+
+---
+- name: test Include and Import
+  hosts: ALL_LINUX
+  become: yes
+
+  vars:
+    myVar: Hello
+
+  - tasks:
+    - name: ping hosts
+      ping:
+
+  - include: create_folder.yml
+
+  - import: create_file.yml myVar="XXX1"
+
+##############################################
+
