@@ -441,3 +441,58 @@ delegate_to
 
 ##############################################
 
+Перехват помилок
+
+Коли на одному хості буде помилка то всі інші таски після неї не будуть виконані
+
+  tasks:
+    - name: task1
+      ansible.builtin.apt:
+        name: treeeee
+        state: present
+      ignore_errors: yes
+Навіть якщо буде помилка в такому завданні то інші продовжать працювати
+
+##############################################
+
+Перехопить помилку і розпечатає на екран в блоці debug
+
+    - name: tasks2
+      shell: ls -la /etc/
+      register: results  # реєстрація результату
+
+    - debug:
+      var: results
+
+
+##############################################
+
+Таск повенен робити failed тільки тоді коли в result.stdout буде слово Hello
+Тобто як зробити raise failed як в python
+
+    - name: tasks3
+      shell: echo "Hello world"
+      register: results  # реєстрація результату
+      failed_when: "'Hello' in results.stdout"
+
+##############################################
+
+Як контролювати чи команда була виконана успішно чи ні
+
+    - name: tasks3
+      shell: echo "Hello world"
+      register: results  # реєстрація результату
+      failed_when: results.rc == 0
+
+    rc - значить return code (0 - успішний, 1 - неуспішний)
+
+##############################################
+
+Як зробити що люба помилка припиняє виконання будь яких інших задач
+
+- name: Ansible error
+  hosts: all
+  any_errors_fatal: true  # оця лінійка
+  become: yes
+
+##############################################

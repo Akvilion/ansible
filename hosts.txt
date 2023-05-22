@@ -1,5 +1,5 @@
 [hst]
-linux1 ansible_host=192.168.0.102 owner=Akvilion ansible_user=a1
+linux1 ansible_host=192.168.0.105 owner=Akvilion ansible_user=a1
 
 
 [ALL_LINUX:children]

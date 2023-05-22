@@ -1,0 +1,24 @@
+- name: Ansible error
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: task1
+      ansible.builtin.apt:
+        name: treeeee
+        state: present
+      ignore_errors: yes
+
+    - name: tasks3
+      shell: echo "Privet mir"
+      register: results  # реєстрація результату
+      failed_when: "'Privet' in results.stdout"
+
+    - debug:
+        var: results
+
+    # - name: tasks2
+    #   shell: ls -la /etc/
+    #   register: results  # реєстрація результату
+
+
