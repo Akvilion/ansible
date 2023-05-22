@@ -496,3 +496,78 @@ delegate_to
   become: yes
 
 ##############################################
+
+Як зберігати паролі в змінні в Ansible
+
+команда
+
+ansible-vault create mysectet.txt
+
+Щоб преглянути файл
+
+команда
+
+ansible-vault view mysectet.txt
+
+Щоб редагувати файл
+
+команда
+
+ansible-vault edit mysectet.txt
+
+Щоб поміняти пароль
+
+команда
+
+ansible-vault rekey mysectet.txt
+
+##############################################
+
+Як зашифрувати плейбук
+
+ansible-vault encrypt playbook.yml
+
+Як розшифрувати плейбук
+
+ansible-vault decrypt playbook.yml
+
+
+Як запустити такий плейбук
+
+ansible-playbook playbook.yml --ask-vault-pass
+
+
+Можна просто зберегти пароль для розшифровки плейбука у файл
+one.txt
+
+тоді
+
+ansible-playbook playbook.yml --vault-password-file one.txt
+
+##############################################
+
+Як зашифрувати змінну в ansible-vault
+
+ansible-vault encrypt-string
+
+
+ansible-vault encrypt-string --stdin-name "***"  
+з роздільником покаже
+
+Тоді в playbook буде виглядати
+
+vars:
+  admin_pass: !vault sd32 r32r 32fr223f32f23rf23f233
+
+Правильний запуск такого playbook
+
+ansible-playbook playbook.yml --ask-vault-pass
+
+
+Альтернативний спосіб загнати пароль у vault
+
+echo -n "asdjwqeodj1o@" | ansible-vault encrypt_string
+
+##############################################
+
+
